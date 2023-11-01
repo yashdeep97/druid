@@ -696,7 +696,7 @@ public interface Expr extends Cacheable
         java.util.function.Function<IdentifierExpr, String> mapper
     )
     {
-      Set<String> results = Sets.newHashSetWithExpectedSize(variables.size());
+      Set<String> results = Sets.newLinkedHashSetWithExpectedSize(variables.size());
       for (IdentifierExpr variable : variables) {
         results.add(mapper.apply(variable));
       }
