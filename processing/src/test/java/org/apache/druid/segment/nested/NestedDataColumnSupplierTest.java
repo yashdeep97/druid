@@ -406,8 +406,8 @@ public class NestedDataColumnSupplierTest extends InitializedNullHandlingTest
     for (int i = 0; i < data.size(); i++) {
       Map row = data.get(i);
       Assert.assertEquals(
-          JSON_MAPPER.writeValueAsString(row),
-          JSON_MAPPER.writeValueAsString(StructuredData.unwrap(rawSelector.getObject()))
+          JSON_MAPPER.readTree(JSON_MAPPER.writeValueAsString(row)),
+          JSON_MAPPER.readTree(JSON_MAPPER.writeValueAsString(StructuredData.unwrap(rawSelector.getObject())))
       );
 
       testPath(row, i, "v", vSelector, vDimSelector, vValueIndex, vPredicateIndex, vNulls, null);
@@ -537,8 +537,8 @@ public class NestedDataColumnSupplierTest extends InitializedNullHandlingTest
     while (offset.withinBounds()) {
       Map row = arrayTestData.get(rowCounter);
       Assert.assertEquals(
-          JSON_MAPPER.writeValueAsString(row),
-          JSON_MAPPER.writeValueAsString(StructuredData.unwrap(rawSelector.getObject()))
+          JSON_MAPPER.readTree(JSON_MAPPER.writeValueAsString(row)),
+          JSON_MAPPER.readTree(JSON_MAPPER.writeValueAsString(StructuredData.unwrap(rawSelector.getObject())))
       );
 
       Object[] s = (Object[]) row.get("s");
@@ -593,8 +593,8 @@ public class NestedDataColumnSupplierTest extends InitializedNullHandlingTest
 
         Map row = arrayTestData.get(rowCounter);
         Assert.assertEquals(
-            JSON_MAPPER.writeValueAsString(row),
-            JSON_MAPPER.writeValueAsString(StructuredData.unwrap(rawVector[i]))
+            JSON_MAPPER.readTree(JSON_MAPPER.writeValueAsString(row)),
+            JSON_MAPPER.readTree(JSON_MAPPER.writeValueAsString(StructuredData.unwrap(rawVector[i])))
         );
         Object[] s = (Object[]) row.get("s");
         Object[] l = (Object[]) row.get("l");
@@ -642,8 +642,8 @@ public class NestedDataColumnSupplierTest extends InitializedNullHandlingTest
       for (int i = 0; i < bitmapVectorOffset.getCurrentVectorSize(); i++, rowCounter += 2) {
         Map row = arrayTestData.get(rowCounter);
         Assert.assertEquals(
-            JSON_MAPPER.writeValueAsString(row),
-            JSON_MAPPER.writeValueAsString(StructuredData.unwrap(rawVector[i]))
+            JSON_MAPPER.readTree(JSON_MAPPER.writeValueAsString(row)),
+            JSON_MAPPER.readTree(JSON_MAPPER.writeValueAsString(StructuredData.unwrap(rawVector[i])))
         );
         Object[] s = (Object[]) row.get("s");
         Object[] l = (Object[]) row.get("l");
