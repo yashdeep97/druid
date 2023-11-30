@@ -21,7 +21,6 @@ package org.apache.druid.java.util.emitter.core;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.common.collect.ImmutableMap;
 import org.apache.druid.java.util.common.StringUtils;
 import org.apache.druid.java.util.common.lifecycle.Lifecycle;
@@ -34,15 +33,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.TreeMap;
+
 
 public class ParametrizedUriEmitterTest
 {
@@ -180,20 +177,14 @@ public class ParametrizedUriEmitterTest
           protected ListenableFuture<Response> go(Request request) throws JsonProcessingException
           {
             Assert.assertEquals("http://example.com/val1/val2", request.getUrl());
-            String event1Json = sortedJsonStrings(JSON_MAPPER.writeValueAsString(events.get(0)));
-            String event2Json = sortedJsonStrings(JSON_MAPPER.writeValueAsString(events.get(1)));
-            String expectedJsonContent = "[ " + event1Json + ", " + event2Json + " ]";
-            byte[] requestBytes = request.getByteBufferData().slice().array();
-            String actualJsonContent = StandardCharsets.UTF_8.decode(ByteBuffer.wrap(requestBytes)).toString();
-            List<Map<String, Object>> jsonArray = new ObjectMapper().readValue(actualJsonContent, List.class);
-            List<Map<String, Object>> sortedJsonArray = new ArrayList<>();
-            for (Map<String, Object> map : jsonArray) {
-              Map<String, Object> sortedMap = new TreeMap<>(map);
-              sortedJsonArray.add(sortedMap);
-            }
-            ObjectWriter writer = new ObjectMapper().writerWithDefaultPrettyPrinter();
-            String sorted = writer.writeValueAsString(sortedJsonArray);
-            Assert.assertEquals(expectedJsonContent, sorted);
+            Assert.assertEquals(
+                JSON_MAPPER.readTree(StringUtils.format(
+                    "[%s,%s]\n",
+                    JSON_MAPPER.writeValueAsString(events.get(0)),
+                    JSON_MAPPER.writeValueAsString(events.get(1))
+                )),
+                JSON_MAPPER.readTree(StandardCharsets.UTF_8.decode(request.getByteBufferData().slice()).toString())
+            );
             return GoHandlers.immediateFuture(EmitterTest.okResponse());
           }
         }.times(1)
@@ -205,15 +196,7 @@ public class ParametrizedUriEmitterTest
     emitter.flush();
     Assert.assertTrue(httpClient.succeeded());
   }
-  private String sortedJsonStrings(String jsonString) throws JsonProcessingException 
-  {
-    ObjectMapper objectMapper = new ObjectMapper();
-    Map<String, Object> map = objectMapper.readValue(jsonString, Map.class);
-    Map<String, Object> sortedMap = new TreeMap<>(map);
 
-    ObjectWriter writer = objectMapper.writerWithDefaultPrettyPrinter();
-    return writer.writeValueAsString(sortedMap);
-  }
   @Test
   public void failEmitMalformedEvent() throws Exception
   {
