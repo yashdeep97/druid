@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-
 public class ParametrizedUriEmitterTest
 {
   private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
