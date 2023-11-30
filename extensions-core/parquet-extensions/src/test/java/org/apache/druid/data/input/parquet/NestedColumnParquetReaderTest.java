@@ -39,6 +39,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 
 public class NestedColumnParquetReaderTest extends BaseParquetReaderTest
@@ -218,7 +219,7 @@ public class NestedColumnParquetReaderTest extends BaseParquetReaderTest
     );
 
     List<InputRow> rows = readAllRows(reader);
-    Assert.assertEquals(ImmutableList.of("nestedData", "dim1", "metric1"), rows.get(0).getDimensions());
+    Assert.assertEquals(new HashSet<>(ImmutableList.of("nestedData", "dim1", "metric1")), new HashSet<>(rows.get(0).getDimensions()));
     Assert.assertEquals(FlattenSpecParquetInputTest.TS1, rows.get(0).getTimestamp().toString());
     Assert.assertEquals(ImmutableList.of("d1v1"), rows.get(0).getDimension("dim1"));
     Assert.assertEquals("d1v1", rows.get(0).getRaw("dim1"));

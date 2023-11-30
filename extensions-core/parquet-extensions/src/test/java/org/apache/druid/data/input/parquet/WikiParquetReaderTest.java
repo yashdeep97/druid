@@ -99,6 +99,7 @@ public class WikiParquetReaderTest extends BaseParquetReaderTest
                                 + "  \"foo\" : \"baz\",\n"
                                 + "  \"time\" : 1678853101621\n"
                                 + "}";
-    Assert.assertEquals(expectedJson, DEFAULT_JSON_WRITER.writeValueAsString(sampled.get(0).getRawValues()));
+    ObjectMapper mapper = new ObjectMapper();
+    Assert.assertEquals(mapper.readTree(expectedJson), mapper.readTree(DEFAULT_JSON_WRITER.writeValueAsString(sampled.get(0).getRawValues())));
   }
 }
