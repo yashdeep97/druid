@@ -21,6 +21,7 @@ package org.apache.druid.data.input.parquet;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import org.apache.druid.data.input.ColumnsFilter;
 import org.apache.druid.data.input.InputEntityReader;
 import org.apache.druid.data.input.InputRow;
@@ -219,7 +220,7 @@ public class NestedColumnParquetReaderTest extends BaseParquetReaderTest
     );
 
     List<InputRow> rows = readAllRows(reader);
-    Assert.assertEquals(new HashSet<>(ImmutableList.of("nestedData", "dim1", "metric1")), new HashSet<>(rows.get(0).getDimensions()));
+    Assert.assertEquals(ImmutableSet.of("nestedData", "dim1", "metric1"), new HashSet<>(rows.get(0).getDimensions()));
     Assert.assertEquals(FlattenSpecParquetInputTest.TS1, rows.get(0).getTimestamp().toString());
     Assert.assertEquals(ImmutableList.of("d1v1"), rows.get(0).getDimension("dim1"));
     Assert.assertEquals("d1v1", rows.get(0).getRaw("dim1"));
