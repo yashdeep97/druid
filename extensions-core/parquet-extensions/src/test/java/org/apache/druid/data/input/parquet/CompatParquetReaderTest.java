@@ -95,7 +95,6 @@ public class CompatParquetReaderTest extends BaseParquetReaderTest
                                 + "  \"ts\" : 1471800234\n"
                                 + "}";
     Assert.assertEquals(objectMapper.readTree(expectedJson), objectMapper.readTree(DEFAULT_JSON_WRITER.writeValueAsString(sampled.get(0).getRawValues())));
-
     final String expectedJsonBinary = "{\n"
                                 + "  \"field\" : \"aGV5IHRoaXMgaXMgJsOpKC3DqF/Dp8OgKT1eJMO5KiEgzqleXg==\",\n"
                                 + "  \"ts\" : 1471800234\n"
@@ -104,7 +103,6 @@ public class CompatParquetReaderTest extends BaseParquetReaderTest
         objectMapper.readTree(expectedJsonBinary), 
         objectMapper.readTree(DEFAULT_JSON_WRITER.writeValueAsString(sampledAsBinary.get(0).getRawValues())));
   }
-
 
   @Test
   public void testParquet1217() throws IOException
@@ -305,7 +303,6 @@ public class CompatParquetReaderTest extends BaseParquetReaderTest
                                 + "  }\n"
                                 + "}";
     Assert.assertEquals(objectMapper.readTree(expectedJson), objectMapper.readTree(DEFAULT_JSON_WRITER.writeValueAsString(sampled.get(0).getRawValues())));
-
   }
 
   @Test
@@ -344,7 +341,6 @@ public class CompatParquetReaderTest extends BaseParquetReaderTest
                                 + "}";
     Assert.assertEquals(expectedJson, DEFAULT_JSON_WRITER.writeValueAsString(sampled.get(0).getRawValues()));
   }
-
 
   @Test
   public void testReadNestedArrayStruct() throws IOException
@@ -386,7 +382,6 @@ public class CompatParquetReaderTest extends BaseParquetReaderTest
                                 + "  } ]\n"
                                 + "}";
     Assert.assertEquals(objectMapper.readTree(expectedJson), objectMapper.readTree(DEFAULT_JSON_WRITER.writeValueAsString(sampled.get(0).getRawValues())));
-
   }
 
   @Test
